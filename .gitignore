@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv
+.idea/
+.vscode/
+
+# Data/cache
+data/*.csv
