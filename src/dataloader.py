@@ -1,4 +1,3 @@
-# src/dataloader.py
 from __future__ import annotations
 from pathlib import Path
 from typing import Iterable, Optional
@@ -10,8 +9,7 @@ def fetch_prices(
     start: str,
     end: str,
     interval: str = "1d",
-    auto_adjust: bool = True,
-    cache_path: Path | None = Path("data/prices.csv"),
+    auto_adjust: bool = True
 
 ) -> pd.DataFrame:
     """
@@ -19,9 +17,7 @@ def fetch_prices(
     Returns a DataFrame with columns per ticker (Adj Close).
     """
     tickers = list(tickers)
-    if cache_path and cache_path.exists():
-        return pd.read_csv(cache_path, parse_dates=["Date"], index_col="Date")
-
+    
     data = yf.download(
         tickers=" ".join(tickers),
         start=start,
@@ -47,8 +43,6 @@ def fetch_prices(
     data = data.dropna(how="all")
     data.index.name = "Date"
 
-    if cache_path:
-        cache_path.parent.mkdir(parents=True, exist_ok=True)
-        data.to_csv(cache_path)
+
     return data
 
