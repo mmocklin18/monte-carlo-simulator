@@ -4,7 +4,10 @@ from src.portfolio import (
     rebalance_portfolio,
     compute_returns,
     compute_drawdown,
-    get_portfolio_values
+    get_portfolio_values,
+    probability_of_goal,
+    value_at_risk,
+    conditional_value_at_risk
 )
 
 def test_portfolio_shape():
@@ -65,3 +68,38 @@ def test_rebalance_portfolio():
     pv_norebalance = get_portfolio_values(paths, weights)
 
     assert pv_rebalanced[0, -1] < pv_norebalance[0, -1]
+
+def test_probability_of_goal():
+    pv = np.array([
+        [100, 130], # hits goal
+        [100, 110], # hits goal
+        [100, 90],  # does not hit goal
+    ])
+    prob = probability_of_goal(pv, target=100)
+    assert np.isclose(prob, 2/3)
+
+
+def test_value_at_risk():
+    pv = np.array([
+        [1, 0.80], # -20%
+        [1, 0.90], # -10%
+        [1, 1.00], # 0%
+        [1, 1.10], # +10%
+        [1, 1.20], # +20%
+    ])
+
+    var = value_at_risk(pv, level=0.20)
+    assert np.isclose(var, -0.12)
+
+
+def test_conditional_value_at_risk():
+    pv = np.array([
+        [1, 0.80], # -20%
+        [1, 0.90], # -10%
+        [1, 1.00], # 0%
+        [1, 1.10], # +10%
+        [1, 1.20], # +20%
+    ])
+
+    cvar = conditional_value_at_risk(pv, level=0.20)
+    assert np.isclose(cvar, -0.20)
