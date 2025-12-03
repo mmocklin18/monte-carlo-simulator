@@ -84,3 +84,48 @@ def compute_drawdown(portfolio_values):
     running_max = np.maximum.accumulate(portfolio_values, axis=1)
     drawdowns = (portfolio_values - running_max) / running_max
     return drawdowns.min(axis=1)
+
+
+def probability_of_goal(portfolio_vals, target):
+    """
+    Compute the probability of reaching a certain target portfolio value.
+    """
+    final_vals = portfolio_vals[:, -1]
+    num_success = np.sum(final_vals >= target)
+    num_total = len(final_vals)
+
+    return num_success / num_total
+
+
+def value_at_risk(portfolio_vals, level=0.05):
+    """
+    Compute Value-at-Risk (VaR) at the given level.
+    
+    VaR tells you with 95% confidence (if level=0.05),
+    what is the worst loss you should expect?
+    """
+
+    final_values = portfolio_vals[:, -1]
+    start_values = portfolio_vals[:, 0]
+    returns = final_values / start_values - 1
+
+    return np.percentile(returns, level * 100)
+
+
+def conditional_value_at_risk(portfolio_vals, level=0.05):
+    """
+    Compute Conditional Value-at-Risk (CVaR) to get average of the tail losses
+    """
+
+    final_values = portfolio_vals[:, -1]
+    start_values = portfolio_vals[:, 0]
+    returns = final_values / start_values - 1
+
+    var_cutoff = value_at_risk(portfolio_vals, level)
+    tail_losses = returns[returns <= var_cutoff]
+
+    return tail_losses.mean()
+
+
+
+
