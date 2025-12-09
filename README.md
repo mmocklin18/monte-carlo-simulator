@@ -13,3 +13,13 @@ src/visualize.py    # plots
 src/simulator.py    # orchestrates run
 data/prices.csv     # cached sample data
 ```
+
+## To Run:
+First run command "mamba activate py3XD" to activate environment
+To run: "python3 main.py"
+optional flags:
+    --scenario: "bull", "bear", "volatile" (market conditions)
+    --paths: int (number of path simulations)
+    --rebalance: int (# of steps until rebalance)
+
+
