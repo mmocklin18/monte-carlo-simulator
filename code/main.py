@@ -19,7 +19,7 @@ def get_args():
 
 def main():
     args = get_args()
-    tickers=["SPY","NVDA","AAPL","AVGO"]
+    tickers=["AMZN","AAPL","JPM","LULU","WBD","JNJ"]
 
     # Load historical prices for chosen tickers
     prices, daily_returns = load_historical_returns(
@@ -37,9 +37,7 @@ def main():
     # starting prices based on last historical price
     s0 = prices.iloc[-1].values
 
-    # equal weights by default
-    weights = np.ones(len(tickers)) / len(tickers)
-
+    weights = [0.2, 0.1, 0.1, 0.1, 0.3, 0.2]
     # basic configuration
     steps = 252
     dt = 1/252
@@ -95,8 +93,8 @@ def main():
     print("==========================\n")
 
 
-    plot_price_paths(paths=paths, n_samples=5)
-    plot_portfolio_paths(portfolio_vals=pv, n_samples=5)
+    plot_price_paths(paths=paths, n_samples=100)
+    plot_portfolio_paths(portfolio_vals=pv, n_samples=100)
 
     
 
